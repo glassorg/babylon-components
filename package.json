@@ -1,7 +1,7 @@
 {
-  "name": "@glas/components",
+  "name": "@glas/babylon-components",
   "version": "0.0.0",
-  "description": "Glass Component Library",
+  "description": "Babylon Component Library",
   "main": "index.js",
   "type": "module",
   "scripts": {
@@ -11,6 +11,11 @@
     "--watch:test": "vitest watch src",
     "watch:web": "vite --port 8080",
     "test": "vitest run src"
+  },
+  "exports": {
+    ".": {
+      "*": "./lib/*"
+    }
   },
   "devDependencies": {
     "@types/json-schema": "^7.0.12",
