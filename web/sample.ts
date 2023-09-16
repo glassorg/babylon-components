@@ -2,7 +2,7 @@ import { Canvas } from "@glas/components/html/elements";
 import { customElement } from "@glas/components/html/CustomElementFactory";
 import * as BABYLON from "babylonjs";
 import { Vector3 } from "babylonjs";
-import { BabylonNode, FreeCamera, Ground, HemisphericLight, Sphere, TransformNode as Transform } from "../src/nodes/nodes.js";
+import { BabylonNode, FreeCamera, Ground, HemisphericLight, Sphere, Transform } from "../src/nodes/nodes.js";
 
 const RootCanvas = customElement(function () {
     const canvas = this;

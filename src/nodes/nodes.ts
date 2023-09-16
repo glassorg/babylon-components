@@ -29,7 +29,7 @@ interface TransformProperties extends NodeProperties {
     rotationQuaternion?: Quaternion
     scaling?: Vector3
 }
-export const TransformNode = babylonNode(BABYLON.TransformNode, ({ name }: TransformProperties) => new BABYLON.TransformNode(name))
+export const Transform = babylonNode(BABYLON.TransformNode, ({ name }: TransformProperties) => new BABYLON.TransformNode(name))
 
 interface SphereProperties extends TransformProperties {
     diameter: number
