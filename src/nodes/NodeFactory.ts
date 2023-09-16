@@ -58,7 +58,7 @@ export class NodeFactory<T extends BABYLON.Node, P extends NodeProperties> exten
         }
         if (removeChildren) {
             for (let i = removeChildren.length - 1; i >= 0; i--) {
-                removeChildren[i].parent = null;
+                removeChildren[i].dispose()
             }
         }
     }
