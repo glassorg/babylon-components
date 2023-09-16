@@ -1,2 +1,2 @@
 
-export const hello = "Babylon Components";
+export const hello = "Babylon Components"

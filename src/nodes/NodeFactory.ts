@@ -1,11 +1,11 @@
-import { ConfigureFactory } from "@glas/components/core/ConfigureFactory";
-import { Factory } from "@glas/components/core/Factory";
-import { Constructor } from "@glas/components/core/types";
-import * as BABYLON from "babylonjs";
+import { ConfigureFactory } from "@glas/components/core/ConfigureFactory"
+import { Factory } from "@glas/components/core/Factory"
+import { Constructor } from "@glas/components/core/types"
+import * as BABYLON from "babylonjs"
 
 export interface NodeProperties {
-    name?: string;
-    children: Factory<BABYLON.Node>[];
+    name?: string
+    children: Factory<BABYLON.Node>[]
 }
 
 export class NodeFactory<T extends BABYLON.Node, P extends NodeProperties> extends ConfigureFactory<T, P> {
@@ -16,43 +16,43 @@ export class NodeFactory<T extends BABYLON.Node, P extends NodeProperties> exten
         protected readonly factoryFunction: (properties: P) => T,
         protected readonly ignoreProperties?: (keyof Required<Omit<P, "children">>)[]
     ) {
-        super(type, properties);
+        super(type, properties)
     }
 
     protected override construct(): T {
-        return this.factoryFunction(this.properties);
+        return this.factoryFunction(this.properties)
     }
 
     protected override configure(node: T, { children, ...properties }: P): void {
         if (this.ignoreProperties) {
-            properties = { ...properties };
+            properties = { ...properties }
             for (let name of this.ignoreProperties) {
-                delete properties[name];
+                delete properties[name]
             }
         }
-        super.configure(node, properties as P);
+        super.configure(node, properties as P)
         if (children) {
-            this.buildChildren(node, children);
+            this.buildChildren(node, children)
         }
     }
 
     protected buildChildren(node: T, childFactories: Factory<BABYLON.Node>[]) {
-        let children = getChildren(node);
-        let removeChildren: BABYLON.Node[] | undefined;
-        let length = Math.max(children?.length ?? 0, childFactories.length);
+        let children = getChildren(node)
+        let removeChildren: BABYLON.Node[] | undefined
+        let length = Math.max(children?.length ?? 0, childFactories.length)
         for (let i = 0; i < length; i++) {
-            let maybeRecycleChild = children?.[i];
-            let childFactory = i < childFactories.length ? childFactories[i] : null;
+            let maybeRecycleChild = children?.[i]
+            let childFactory = i < childFactories.length ? childFactories[i] : null
             if (maybeRecycleChild && childFactory && childFactory.isInstance(maybeRecycleChild)) {
-                childFactory.build(maybeRecycleChild);
+                childFactory.build(maybeRecycleChild)
             }
             else {
                 if (maybeRecycleChild) {
-                    (removeChildren ??= []).push(maybeRecycleChild);
+                    (removeChildren ??= []).push(maybeRecycleChild)
                 }
                 if (childFactory) {
-                    let child = childFactory.build();
-                    child.parent = node;
+                    let child = childFactory.build()
+                    child.parent = node
                 }
             }
         }
@@ -66,7 +66,7 @@ export class NodeFactory<T extends BABYLON.Node, P extends NodeProperties> exten
 }
 
 function getChildren(node: BABYLON.Node): BABYLON.Node[] | null {
-    return (node as any)._children;
+    return (node as any)._children
 }
 
 export function babylonNode<T extends BABYLON.Node, P extends NodeProperties>(
@@ -75,27 +75,27 @@ export function babylonNode<T extends BABYLON.Node, P extends NodeProperties>(
     ignoreProperties?: (keyof Omit<P, "children">)[],
 ): CreateFunction<T, P> {
     function create(propertiesOrFirstChild: P, ...otherChildren: Factory<BABYLON.Node>[]): Factory<T> {
-        let properties: P | undefined;
+        let properties: P | undefined
         if (propertiesOrFirstChild instanceof Factory) {
-            otherChildren.unshift(propertiesOrFirstChild);
+            otherChildren.unshift(propertiesOrFirstChild)
         }
         else {
-            properties = propertiesOrFirstChild;
+            properties = propertiesOrFirstChild
         }
-        properties ??= {} as P;
-        properties.children = otherChildren;
+        properties ??= {} as P
+        properties.children = otherChildren
         console.log({ otherChildren })
-        return new NodeFactory(type, properties, factoryFunction, ignoreProperties);
+        return new NodeFactory(type, properties, factoryFunction, ignoreProperties)
     }
-    return create as unknown as CreateFunction<T, P>;
+    return create as unknown as CreateFunction<T, P>
 }
 
-type ChildrenType<P> = P extends { children: Array<infer C> } ? P["children"] : never[];
+type ChildrenType<P> = P extends { children: Array<infer C> } ? P["children"] : never[]
 
 export type CreateFunction<T extends BABYLON.Node, P extends object> = { children } extends P ? {
     (properties: Omit<P, "children">, ...children: ChildrenType<P>): Factory<T>,
     (...children: ChildrenType<P>): Factory<T>,
 } : {
     (properties: Omit<P, "children">, ...children: ChildrenType<P>): Factory<T>,
-};
+}
 
