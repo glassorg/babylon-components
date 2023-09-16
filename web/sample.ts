@@ -12,8 +12,8 @@ const RootCanvas = customElement(function () {
         const scene = new BABYLON.Scene(engine);    // Creates a basic Babylon Scene object.
 
         BabylonNode({ name: "root" },
-            FreeCamera({ name: "camera1", position: new BABYLON.Vector3(0, 5, -10), target: BABYLON.Vector3.Zero() }),
-            HemisphericLight({ name: "light", direction: new BABYLON.Vector3(0, 1, 0), intensity: 0.7 }),
+            FreeCamera({ name: "camera1", position: new Vector3(0, 5, -10), target: Vector3.Zero() }),
+            HemisphericLight({ name: "light", direction: new Vector3(0, 1, 0), intensity: 0.7 }),
             Transform({ name: "parent", position: new Vector3(0, 0, 0) },
                 Sphere({ name: "a", diameter: 1.3, segments: 32, position: new Vector3(0, 1, 0) }),
                 Sphere({ name: "b", diameter: 2.2, segments: 32, position: new Vector3(0, 2, 0) }),
