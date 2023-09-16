@@ -1,7 +1,8 @@
 import { Canvas } from "@glas/components/html/elements";
 import { customElement } from "@glas/components/html/CustomElementFactory";
 import * as BABYLON from "babylonjs";
-import { FreeCamera, HemisphericLight } from "../src/nodes/nodes.js";
+import { Vector3 } from "babylonjs";
+import { BabylonNode, FreeCamera, Ground, HemisphericLight, Sphere, TransformNode as Transform } from "../src/nodes/nodes.js";
 
 const RootCanvas = customElement(function () {
     const canvas = this;
@@ -10,19 +11,16 @@ const RootCanvas = customElement(function () {
 
         const scene = new BABYLON.Scene(engine);    // Creates a basic Babylon Scene object.
 
-        // const camera = new BABYLON.FreeCamera("camera1", new BABYLON.Vector3(0, 5, -10)); // Creates and positions a free camera.
-        // camera.setTarget(BABYLON.Vector3.Zero());   // Targets the camera to scene origin.
-        // camera.attachControl(canvas, true);         // This attaches the camera to the canvas.
-        FreeCamera({ name: "camera1", position: new BABYLON.Vector3(0, 5, -10), target: BABYLON.Vector3.Zero() }).build();
-
-        // const light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(0, 1, 0)); // Creates a light, aiming 0,1,0 - to the sky.
-        // light.intensity = 0.7; // Dim the light a small amount - 0 to 1
-        HemisphericLight({ name: "light", direction: new BABYLON.Vector3(0, 1, 0), intensity: 0.7 }).build();
-
-        const sphere = BABYLON.MeshBuilder.CreateSphere("sphere", { diameter: 2, segments: 32 }); // Built-in 'sphere' shape.
-        sphere.position.y = 1; // Move the sphere upward 1/2 its height.
-
-        const ground = BABYLON.MeshBuilder.CreateGround("ground", { width: 6, height: 6 }); // Built-in 'ground' shape.
+        BabylonNode({ name: "root" },
+            FreeCamera({ name: "camera1", position: new BABYLON.Vector3(0, 5, -10), target: BABYLON.Vector3.Zero() }),
+            HemisphericLight({ name: "light", direction: new BABYLON.Vector3(0, 1, 0), intensity: 0.7 }),
+            Transform({ name: "parent", position: new Vector3(0, 0, 0) },
+                Sphere({ name: "a", diameter: 1.3, segments: 32, position: new Vector3(0, 1, 0) }),
+                Sphere({ name: "b", diameter: 2.2, segments: 32, position: new Vector3(0, 2, 0) }),
+                Sphere({ name: "c", diameter: 3, segments: 32, position: new Vector3(0, 3, 0) }),
+                Ground({ name: "ground", width: 8, height: 4 })
+            ),
+        ).build()
 
         return scene;
     };
