@@ -2,7 +2,7 @@ import * as BABYLON from "babylonjs"
 import { Vector3, Quaternion } from "babylonjs"
 import { NodeProperties, babylonNode } from "./NodeFactory.js"
 
-export const BabylonNode = babylonNode(BABYLON.Node, ({ name }: NodeProperties) => new BABYLON.Node(name))
+export const BabylonNode = babylonNode(BABYLON.Node, ({ name = "Node" }: NodeProperties) => new BABYLON.Node(name))
 
 interface FreeCameraProperties extends NodeProperties {
     position: Vector3
@@ -10,7 +10,7 @@ interface FreeCameraProperties extends NodeProperties {
     children: never[]
     attach?: HTMLCanvasElement
 }
-export const FreeCamera = babylonNode(BABYLON.FreeCamera, ({ name, position, attach }: FreeCameraProperties) => {
+export const FreeCamera = babylonNode(BABYLON.FreeCamera, ({ name = "FreeCamera", position, attach }: FreeCameraProperties) => {
     const node = new BABYLON.FreeCamera(name, position)
     node.attachControl(attach, true)
     return node
@@ -21,7 +21,7 @@ interface HemisphericLightProperties extends NodeProperties {
     intensity?: number
     children: never[]
 }
-export const HemisphericLight = babylonNode(BABYLON.HemisphericLight, ({ name, direction }: HemisphericLightProperties) => new BABYLON.HemisphericLight(name, direction))
+export const HemisphericLight = babylonNode(BABYLON.HemisphericLight, ({ name = "HemisphericLight", direction }: HemisphericLightProperties) => new BABYLON.HemisphericLight(name, direction))
 
 interface TransformProperties extends NodeProperties {
     position?: Vector3
@@ -29,16 +29,16 @@ interface TransformProperties extends NodeProperties {
     rotationQuaternion?: Quaternion
     scaling?: Vector3
 }
-export const Transform = babylonNode(BABYLON.TransformNode, ({ name }: TransformProperties) => new BABYLON.TransformNode(name))
+export const Transform = babylonNode(BABYLON.TransformNode, ({ name = "TransformNode" }: TransformProperties) => new BABYLON.TransformNode(name))
 
 interface SphereProperties extends TransformProperties {
     diameter: number
     segments: number
 }
-export const Sphere = babylonNode(BABYLON.Mesh, ({ name, diameter, segments }: SphereProperties) => BABYLON.MeshBuilder.CreateSphere(name, { diameter, segments }))
+export const Sphere = babylonNode(BABYLON.Mesh, ({ name = "Sphere", diameter, segments }: SphereProperties) => BABYLON.MeshBuilder.CreateSphere(name, { diameter, segments }))
 
 interface GroundProperties extends TransformProperties {
     width: number
     height: number
 }
-export const Ground = babylonNode(BABYLON.Mesh, ({ name, width, height }: GroundProperties) => BABYLON.MeshBuilder.CreateGround("ground", { width, height }))
+export const Ground = babylonNode(BABYLON.Mesh, ({ name = "Ground", width, height }: GroundProperties) => BABYLON.MeshBuilder.CreateGround(name, { width, height }))

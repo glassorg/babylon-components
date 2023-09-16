@@ -4,7 +4,7 @@ import { Constructor } from "@glas/components/core/types";
 import * as BABYLON from "babylonjs";
 
 export interface NodeProperties {
-    name: string;
+    name?: string;
     children: Factory<BABYLON.Node>[];
 }
 
